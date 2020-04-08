@@ -3,59 +3,200 @@
     "properties": {
         "name": "main",
         "environment": {
-            "type": "noflo-browser"
-        }
+            "type": "noflo-browser",
+            "content": ""
+        },
+        "description": "Click counter",
+        "icon": ""
     },
     "inports": {},
     "outports": {},
-    "groups": [],
-    "processes": {
-        "GetFlowhubStats": {
-            "component": "flowhubstats/FlowhubStats",
+    "groups": [
+        {
+            "name": "Count clicks",
+            "nodes": [
+                "SendPrevious",
+                "math/Add_sf9cd",
+                "strings/ParseInt_dcn5l",
+                "strings/SendString_rwdu4"
+            ],
             "metadata": {
-                "label": "GetFlowhubStats",
-                "x": 144,
-                "y": 180,
-                "width": 72,
-                "height": 72
+                "description": ""
             }
         },
-        "GetBody": {
+        {
+            "name": "Write HTML",
+            "nodes": [
+                "GetContainer",
+                "SendContainer",
+                "dom/WriteHtml_izii1",
+                "CreateState",
+                "SendPacket",
+                "SetPacketCount",
+                "ProductString"
+            ],
+            "metadata": {
+                "description": ""
+            }
+        },
+        {
+            "name": "Interaction",
+            "nodes": [
+                "interaction/ListenMouse_mev1o",
+                "Choose first"
+            ],
+            "metadata": {
+                "description": ""
+            }
+        }
+    ],
+    "processes": {
+        "GetContainer": {
             "component": "dom/GetElement",
             "metadata": {
-                "label": "GetBody",
-                "x": 0,
-                "y": 72,
+                "label": "GetContainer",
+                "x": 1080,
+                "y": 324,
                 "width": 72,
                 "height": 72
             }
         },
-        "dom/WriteHtml_gdztb": {
+        "dom/WriteHtml_izii1": {
             "component": "dom/WriteHtml",
             "metadata": {
                 "label": "WriteHtml",
-                "x": 468,
+                "x": 1296,
                 "y": 72,
                 "width": 72,
                 "height": 72
             }
         },
-        "WriteReport": {
-            "component": "strings/StringTemplate",
+        "interaction/ListenMouse_mev1o": {
+            "component": "interaction/ListenMouse",
             "metadata": {
-                "label": "WriteReport",
-                "x": 288,
-                "y": 180,
+                "label": "ListenMouse",
+                "x": 1836,
+                "y": 324,
                 "width": 72,
                 "height": 72
             }
         },
-        "GetErrorMessage": {
-            "component": "objects/GetObjectKey",
+        "Selector": {
+            "component": "core/Kick",
             "metadata": {
-                "label": "GetErrorMessage",
-                "x": 288,
+                "label": "Selector",
+                "x": 864,
+                "y": 468,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "ProductString": {
+            "component": "strings/StringTemplate",
+            "metadata": {
+                "label": "ProductString",
+                "x": 1080,
+                "y": 36,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "CreateState": {
+            "component": "objects/CreateObject",
+            "metadata": {
+                "label": "CreateState",
+                "x": 684,
+                "y": 108,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "SetPacketCount": {
+            "component": "objects/SetPropertyValue",
+            "metadata": {
+                "label": "SetPacketCount",
+                "x": 936,
+                "y": 144,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "Choose first": {
+            "component": "packets/First",
+            "metadata": {
+                "label": "Choose first",
+                "x": 1548,
                 "y": 324,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "Start graph": {
+            "component": "core/Repeat",
+            "metadata": {
+                "label": "Start graph",
+                "x": 612,
+                "y": 468,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "math/Add_sf9cd": {
+            "component": "math/Add",
+            "metadata": {
+                "label": "Add",
+                "x": 504,
+                "y": 288,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "strings/SendString_rwdu4": {
+            "component": "strings/SendString",
+            "metadata": {
+                "label": "SendString",
+                "x": 216,
+                "y": 288,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "strings/ParseInt_dcn5l": {
+            "component": "strings/ParseInt",
+            "metadata": {
+                "label": "ParseInt",
+                "x": 396,
+                "y": 288,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "SendPrevious": {
+            "component": "core/Kick",
+            "metadata": {
+                "label": "SendPrevious",
+                "x": 504,
+                "y": 144,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "SendPacket": {
+            "component": "strings/SendString",
+            "metadata": {
+                "label": "SendPacket",
+                "x": 828,
+                "y": 0,
+                "width": 72,
+                "height": 72
+            }
+        },
+        "SendContainer": {
+            "component": "core/Kick",
+            "metadata": {
+                "label": "SendContainer",
+                "x": 1224,
+                "y": 216,
                 "width": 72,
                 "height": 72
             }
@@ -64,108 +205,303 @@
     "connections": [
         {
             "src": {
-                "process": "GetBody",
+                "process": "Selector",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "GetContainer",
+                "port": "selector"
+            }
+        },
+        {
+            "src": {
+                "process": "SetPacketCount",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "ProductString",
+                "port": "in"
+            }
+        },
+        {
+            "src": {
+                "process": "ProductString",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "dom/WriteHtml_izii1",
+                "port": "html"
+            }
+        },
+        {
+            "src": {
+                "process": "Choose first",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "interaction/ListenMouse_mev1o",
+                "port": "element"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "Start graph",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "dom/WriteHtml_izii1",
+                "port": "html"
+            }
+        },
+        {
+            "src": {
+                "process": "Start graph",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "Selector",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "GetContainer",
                 "port": "element"
             },
             "tgt": {
-                "process": "dom/WriteHtml_gdztb",
+                "process": "Choose first",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "CreateState",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "SetPacketCount",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "interaction/ListenMouse_mev1o",
+                "port": "click"
+            },
+            "tgt": {
+                "process": "strings/SendString_rwdu4",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "math/Add_sf9cd",
+                "port": "sum"
+            },
+            "tgt": {
+                "process": "CreateState",
+                "port": "start"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "math/Add_sf9cd",
+                "port": "sum"
+            },
+            "tgt": {
+                "process": "SetPacketCount",
+                "port": "value"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "strings/ParseInt_dcn5l",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "math/Add_sf9cd",
+                "port": "addend"
+            }
+        },
+        {
+            "src": {
+                "process": "math/Add_sf9cd",
+                "port": "sum"
+            },
+            "tgt": {
+                "process": "SendPrevious",
+                "port": "data"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "strings/SendString_rwdu4",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "SendPrevious",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "SendPrevious",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "math/Add_sf9cd",
+                "port": "augend"
+            }
+        },
+        {
+            "src": {
+                "process": "strings/SendString_rwdu4",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "strings/ParseInt_dcn5l",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "SendPacket",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "SetPacketCount",
+                "port": "property"
+            }
+        },
+        {
+            "src": {
+                "process": "CreateState",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "SendPacket",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "GetContainer",
+                "port": "element"
+            },
+            "tgt": {
+                "process": "SendContainer",
+                "port": "data"
+            }
+        },
+        {
+            "src": {
+                "process": "ProductString",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "SendContainer",
+                "port": "in"
+            },
+            "metadata": {
+                "route": 0
+            }
+        },
+        {
+            "src": {
+                "process": "SendContainer",
+                "port": "out"
+            },
+            "tgt": {
+                "process": "dom/WriteHtml_izii1",
                 "port": "container"
-            },
-            "metadata": {
-                "route": 2
             }
         },
         {
             "src": {
-                "process": "WriteReport",
-                "port": "out"
-            },
-            "tgt": {
-                "process": "dom/WriteHtml_gdztb",
-                "port": "html"
-            },
-            "metadata": {
-                "route": 4
-            }
-        },
-        {
-            "src": {
-                "process": "GetFlowhubStats",
-                "port": "out"
-            },
-            "tgt": {
-                "process": "WriteReport",
-                "port": "in"
-            },
-            "metadata": {
-                "route": 4
-            }
-        },
-        {
-            "src": {
-                "process": "GetFlowhubStats",
-                "port": "error"
-            },
-            "tgt": {
-                "process": "GetErrorMessage",
-                "port": "in"
-            },
-            "metadata": {
-                "route": 1
-            }
-        },
-        {
-            "src": {
-                "process": "GetErrorMessage",
-                "port": "out"
-            },
-            "tgt": {
-                "process": "dom/WriteHtml_gdztb",
-                "port": "html"
-            },
-            "metadata": {
-                "route": 1
-            }
-        },
-        {
-            "src": {
-                "process": "GetBody",
+                "process": "GetContainer",
                 "port": "element"
             },
             "tgt": {
-                "process": "GetFlowhubStats",
+                "process": "SendContainer",
                 "port": "in"
             },
             "metadata": {
-                "route": 2
+                "route": 0
             }
         },
         {
             "data": "body",
             "tgt": {
-                "process": "GetBody",
-                "port": "selector"
+                "process": "Selector",
+                "port": "data"
             }
         },
         {
-            "data": "There are <%= runtimes.total %> registered runtimes",
+            "data": "Click here",
             "tgt": {
-                "process": "WriteReport",
+                "process": "Start graph",
+                "port": "in"
+            }
+        },
+        {
+            "data": "1",
+            "tgt": {
+                "process": "strings/SendString_rwdu4",
+                "port": "string"
+            }
+        },
+        {
+            "data": "0",
+            "tgt": {
+                "process": "SendPrevious",
+                "port": "data"
+            }
+        },
+        {
+            "data": "packet",
+            "tgt": {
+                "process": "SendPacket",
+                "port": "string"
+            }
+        },
+        {
+            "data": "You've clicked <%= packet %> times so far",
+            "tgt": {
+                "process": "ProductString",
                 "port": "template"
-            }
-        },
-        {
-            "data": "message",
-            "tgt": {
-                "process": "GetErrorMessage",
-                "port": "key"
-            }
-        },
-        {
-            "data": false,
-            "tgt": {
-                "process": "GetErrorMessage",
-                "port": "sendgroup"
             }
         }
     ]

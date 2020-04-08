@@ -13,11 +13,13 @@
   "scripts": {
     "test": "eslint components/*.js",
     "start": "./node_modules/.bin/noflo-nodejs --trace --debug",
-    "start:dev": "./node_modules/.bin/noflo-nodejs --registry \"http://localhost\" --ide \"http://localhost:9999/\" --auto-save"
+    "start:dev": "./node_modules/.bin/noflo-nodejs --registry \"http://localhost\" --ide \"http://localhost:9999/\" --secret \"radhouene\"--auto-save --graph graphs/ShowContents.fbp"
   },
   "dependencies": {
     "noflo": "^1.1.0",
+    "noflo-core": "^0.6.1",
     "noflo-dom": "^0.3.0",
+    "noflo-filesystem": "^2.0.1",
     "noflo-objects": "^0.5.0",
     "noflo-strings": "^0.4.0"
   },
